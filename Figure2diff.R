@@ -8,12 +8,12 @@
 
 library("limma")
 
-setwd("C:\\Users\\qiulin\\Desktop\\necropotisis\\05diff")                 #ÉèÖÃ¹¤×÷Ä¿Â¼
-inputFile="necroptosisexp.txt"                                             #ÊäÈëÎÄ¼þ
-fdrFilter=0.05                                                   #fdrÁÙ½çÖµ
-logFCfilter=1                                                     #logFCÁÙ½çÖµ
+setwd("C:\\Users\\qiulin\\Desktop\\necropotisis\\05diff")                 #è®¾ç½®å·¥ä½œç›®å½•
+inputFile="necroptosisexp.txt"                                             #è¾“å…¥æ–‡ä»¶
+fdrFilter=0.05                                                   #fdrä¸´ç•Œå€¼
+logFCfilter=1                                                     #logFCä¸´ç•Œå€¼
 
-#¶ÁÈ¡ÊäÈëÎÄ¼þ
+#è¯»å–è¾“å…¥æ–‡ä»¶
 rt=read.table(inputFile, header=T, sep="\t", check.names=F)
 rt=as.matrix(rt)
 rownames(rt)=rt[,1]
@@ -29,7 +29,7 @@ conNum=length(group[group==1])
 treatNum=length(group[group==0])    
 Type=c(rep(1,conNum), rep(2,treatNum))
 
-#¶ÁÈ¡ÊäÈëÎÄ¼þ
+#è¯»å–è¾“å…¥æ–‡ä»¶
 outTab=data.frame()
 grade=c(rep(1,conNum),rep(2,treatNum))
 rt=read.table(inputFile,sep="\t",header=T,check.names=F)
@@ -41,7 +41,7 @@ data=matrix(as.numeric(as.matrix(exp)),nrow=nrow(exp),dimnames=dimnames)
 data=avereps(data)
 data=data[rowMeans(data)>0,]
 
-#²îÒì·ÖÎö
+#å·®å¼‚åˆ†æž
 for(i in row.names(data)){
   geneName=unlist(strsplit(i,"\\|",))[1]
   geneName=gsub("\\/", "_", geneName)
@@ -63,18 +63,18 @@ pValue=outTab[,"pValue"]
 fdr=p.adjust(as.numeric(as.vector(pValue)),method="fdr")
 outTab=cbind(outTab,fdr=fdr)
 
-#Êä³öËùÓÐ»ùÒòµÄ²îÒìÇé¿ö
+#è¾“å‡ºæ‰€æœ‰åŸºå› çš„å·®å¼‚æƒ…å†µ
 write.table(outTab,file="all.xls",sep="\t",row.names=F,quote=F)
 
-#Êä³ö²îÒì±í¸ñ
+#è¾“å‡ºå·®å¼‚è¡¨æ ¼
 outDiff=outTab[( abs(as.numeric(as.vector(outTab$logFC)))>logFCfilter & as.numeric(as.vector(outTab$fdr))<fdrFilter),]
 write.table(outDiff,file="diff.xls",sep="\t",row.names=F,quote=F)
 
-#»æÖÆÈÈÍ¼ÐèÒªµÄÎÄ¼þ
+#ç»˜åˆ¶çƒ­å›¾éœ€è¦çš„æ–‡ä»¶
 heatmap=rbind(ID=colnames(data[as.vector(outDiff[,1]),]),data[as.vector(outDiff[,1]),])
 write.table(heatmap,file="diffnecroptosisExp.txt",sep="\t",col.names=F,quote=F)
 
-#»æÖÆ»ðÉ½Í¼
+#ç»˜åˆ¶ç«å±±å›¾
 pdf(file="vol.pdf",height=5,width=5)
 xMax=max(abs(as.numeric(as.vector(outTab$logFC))))
 yMax=max(-log10(outTab$fdr))+1
@@ -87,7 +87,7 @@ points(as.numeric(as.vector(diffSub$logFC)), -log10(diffSub$fdr), pch=20, col="d
 abline(v=0,lty=2,lwd=3)
 dev.off()
 
-#»æÖÆ²îÒì»ùÒòÈÈÍ¼
+#ç»˜åˆ¶å·®å¼‚åŸºå› çƒ­å›¾
 library(pheatmap)
 hmExp=data[as.vector(outDiff[,1]),]
 hmExp=log2(hmExp+0.01)
@@ -110,25 +110,25 @@ dev.off()
 library(ggpubr)
 
 
-rt=read.table("diffnecroptosisExp.txt",sep="\t",header=T,check.names=F,row.names=1)       #¶ÁÈ¡ÊäÈëÎÄ¼þ
+rt=read.table("diffnecroptosisExp.txt",sep="\t",header=T,check.names=F,row.names=1)       #è¯»å–è¾“å…¥æ–‡ä»¶
 rt=t(rt)
 type=c(rep("N",conNum),rep("T",treatNum))
 
-#×¼±¸ÏäÏßÍ¼µÄÊäÈëÎÄ¼þ
+#å‡†å¤‡ç®±çº¿å›¾çš„è¾“å…¥æ–‡ä»¶
 data=data.frame()
 for(i in colnames(rt)){
   data=rbind(data,cbind(expression=log2(rt[,i]+1),gene=i,type))
 }
 write.table(data,file="diffnecroptosisExp1.txt",sep="\t",row.names=F,quote=F)
 
-#»æÖÆÏäÐÍÍ¼
-data=read.table("diffnecroptosisExp1.txt",sep="\t",header=T,check.names=F)       #¶ÁÈ¡ÏäÏßÍ¼ÊäÈëÎÄ¼þ
+#ç»˜åˆ¶ç®±åž‹å›¾
+data=read.table("diffnecroptosisExp1.txt",sep="\t",header=T,check.names=F)       #è¯»å–ç®±çº¿å›¾è¾“å…¥æ–‡ä»¶
 p=ggboxplot(data, x="gene", y="expression", color = "type", 
      ylab="Gene expression",
      xlab="",
      palette = c("blue","orange") )
 p=p+rotate_x_text(60)
-pdf(file="boxplot.pdf",width=11,height=5)                          #Êä³öÍ¼Æ¬ÎÄ¼þ
+pdf(file="boxplot.pdf",width=11,height=5)                          #è¾“å‡ºå›¾ç‰‡æ–‡ä»¶
 p
 dev.off()
 #
