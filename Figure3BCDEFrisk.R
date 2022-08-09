@@ -8,7 +8,7 @@ library(survival)
 library(survminer)
 library(timeROC)
 library(pheatmap)
-setwd("C:\\Users\\qiulin\\Desktop\\Ê§³²µòÍö\\10KMlogFC2")             #ÉèÖÃ¹¤×÷Ä¿Â¼
+setwd("C:\\Users\\qiulin\\Desktop\\å¤±å·¢å‡‹äº¡\\10KMlogFC2")             #è®¾ç½®å·¥ä½œç›®å½•
 rt=read.table("Risk.txt",sep="\t",header=T,row.names=1,check.names=F)     
 rt=rt[order(rt$riskScore),]                                   
 
@@ -36,7 +36,7 @@ abline(h=median(rt$riskScore),v=lowLength,lty=2)
 legend("topleft", c("High risk", "low Risk"),bty="n",pch=19,col=c("orange","blue"),cex=1.2)
 dev.off()
 
-#»æÖÆÉú´æ×´Ì¬Í¼
+#ç»˜åˆ¶ç”Ÿå­˜çŠ¶æ€å›¾
 color=as.vector(rt$fustat)
 color[color==1]="orange"
 color[color==0]="blue"
@@ -50,7 +50,7 @@ legend("topleft", c("Dead", "Alive"),bty="n",pch=19,col=c("orange","blue"),cex=1
 abline(v=lowLength,lty=2)
 dev.off()
 
-#»æÖÆ·çÏÕÈÈÍ¼
+#ç»˜åˆ¶é£é™©çƒ­å›¾
 rt1=log2(rt[c(3:(ncol(rt)-2))]+0.01)
 rt1=t(rt1)
 annotation=data.frame(type=rt[,ncol(rt)])
@@ -87,21 +87,21 @@ dev.off()
 
 
 
-inputFile="risk.txt"        #ÊäÈëÎÄ¼ş
-survFile="survival.pdf"         #Éú´æÇúÏßÎÄ¼ş
-rocFile="ROC.pdf"               #ROCÇúÏßÎÄ¼ş
+inputFile="risk.txt"        #è¾“å…¥æ–‡ä»¶
+survFile="survival.pdf"         #ç”Ÿå­˜æ›²çº¿æ–‡ä»¶
+rocFile="ROC.pdf"               #ROCæ›²çº¿æ–‡ä»¶
 
 
 
-#¶ÁÈ¡ÊäÈëÎÄ¼ş
+#è¯»å–è¾“å…¥æ–‡ä»¶
 rt=read.table(inputFile,header=T,sep="\t")
 
-#±È½Ï¸ßµÍ·çÏÕ×éÉú´æ²îÒì£¬µÃµ½ÏÔÖøĞÔpÖµ
+#æ¯”è¾ƒé«˜ä½é£é™©ç»„ç”Ÿå­˜å·®å¼‚ï¼Œå¾—åˆ°æ˜¾è‘—æ€§på€¼
 diff=survdiff(Surv(futime, fustat) ~risk,data = rt)
 pValue=1-pchisq(diff$chisq,df=1)
 fit <- survfit(Surv(futime, fustat) ~ risk, data = rt)
 
-#»æÖÆÉú´æÇúÏß
+#ç»˜åˆ¶ç”Ÿå­˜æ›²çº¿
 surPlot=ggsurvplot(fit, 
                      data=rt,
                      conf.int=T,
@@ -120,7 +120,7 @@ print(surPlot)
 dev.off()
 
 
-###ROCÇúÏß
+###ROCæ›²çº¿
 ROC_rt=timeROC(T=rt$futime,delta=rt$fustat,
                marker=rt$riskScore,cause=1,
                weighting='aalen',
