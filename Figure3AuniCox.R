@@ -1,19 +1,19 @@
 ######Video source: https://ke.biowolf.cn
-######ÉúĞÅ×ÔÑ§Íø: https://www.biowolf.cn/
-######Î¢ĞÅ¹«ÖÚºÅ£ºbiowolf_cn
-######ºÏ×÷ÓÊÏä£ºbiowolf@foxmail.com
-######´ğÒÉÎ¢ĞÅ: 18520221056
+######ç”Ÿä¿¡è‡ªå­¦ç½‘: https://www.biowolf.cn/
+######å¾®ä¿¡å…¬ä¼—å·ï¼šbiowolf_cn
+######åˆä½œé‚®ç®±ï¼šbiowolf@foxmail.com
+######ç­”ç–‘å¾®ä¿¡: 18520221056
 
 #install.packages("survival")
 
 
-library(survival)      #ÒıÓÃ°ü
-pFilter=0.05           #ÏÔÖøĞÔ¹ıÂËÌõ¼ş
-setwd("D:\\biowolf\\FerrLnc\\14.uniCox")     #ÉèÖÃ¹¤×÷Ä¿Â¼
-rt=read.table("expTime.txt", header=T, sep="\t", check.names=F, row.names=1)     #¶ÁÈ¡ÊäÈëÎÄ¼ş
-rt$futime=rt$futime/365      #Éú´æµ¥Î»¸Ä³ÉÄê
+library(survival)      #å¼•ç”¨åŒ…
+pFilter=0.05           #æ˜¾è‘—æ€§è¿‡æ»¤æ¡ä»¶
+setwd("D:\\biowolf\\FerrLnc\\14.uniCox")     #è®¾ç½®å·¥ä½œç›®å½•
+rt=read.table("expTime.txt", header=T, sep="\t", check.names=F, row.names=1)     #è¯»å–è¾“å…¥æ–‡ä»¶
+rt$futime=rt$futime/365      #ç”Ÿå­˜å•ä½æ”¹æˆå¹´
 
-#µ¥ÒòËØcox·ÖÎö
+#å•å› ç´ coxåˆ†æ
 outTab=data.frame()
 sigGenes=c("futime","fustat")
 for(gene in colnames(rt[,3:ncol(rt)])){
@@ -32,16 +32,16 @@ for(gene in colnames(rt[,3:ncol(rt)])){
 	}
 }
 
-#Êä³öµ¥ÒòËØ½á¹û
+#è¾“å‡ºå•å› ç´ ç»“æœ
 write.table(outTab,file="uniCox.txt",sep="\t",row.names=F,quote=F)
 surSigExp=rt[,sigGenes]
 surSigExp=cbind(id=row.names(surSigExp),surSigExp)
 write.table(surSigExp,file="uniSigExp.txt",sep="\t",row.names=F,quote=F)
 
 
-############»æÖÆÉ­ÁÖÍ¼º¯Êı############
+############ç»˜åˆ¶æ£®æ—å›¾å‡½æ•°############
 bioForest=function(coxFile=null, forestFile=null){
-	#¶ÁÈ¡ÊäÈëÎÄ¼ş
+	#è¯»å–è¾“å…¥æ–‡ä»¶
 	rt <- read.table(coxFile,header=T,sep="\t",check.names=F,row.names=1)
 	gene <- rownames(rt)
 	hr <- sprintf("%.3f",rt$"HR")
@@ -51,7 +51,7 @@ bioForest=function(coxFile=null, forestFile=null){
 	Hazard.ratio <- paste0(hr,"(",hrLow,"-",hrHigh,")")
 	pVal <- ifelse(rt$pvalue<0.001, "<0.001", sprintf("%.3f", rt$pvalue))
 		
-	#Êä³öÍ¼ĞÎ
+	#è¾“å‡ºå›¾å½¢
 	height=(nrow(rt)/15)+5
 	pdf(file=forestFile, width=8, height=height)
 	n <- nrow(rt)
@@ -59,7 +59,7 @@ bioForest=function(coxFile=null, forestFile=null){
 	ylim <- c(1,nRow)
 	layout(matrix(c(1,2),nc=2),width=c(3,2.5))
 		
-	#»æÖÆÉ­ÁÖÍ¼×ó±ßµÄĞÅÏ¢
+	#ç»˜åˆ¶æ£®æ—å›¾å·¦è¾¹çš„ä¿¡æ¯
 	xlim = c(0,3)
 	par(mar=c(4,2.5,2,1))
 	plot(1,xlim=xlim,ylim=ylim,type="n",axes=F,xlab="",ylab="")
@@ -68,7 +68,7 @@ bioForest=function(coxFile=null, forestFile=null){
 	text(1.5-0.5*0.2,n:1,pVal,adj=1,cex=text.cex);text(1.5-0.5*0.2,n+1,'pvalue',cex=text.cex,adj=1)
 	text(3,n:1,Hazard.ratio,adj=1,cex=text.cex);text(3,n+1,'Hazard ratio',cex=text.cex,adj=1,)
 		
-	#»æÖÆÉ­ÁÖÍ¼
+	#ç»˜åˆ¶æ£®æ—å›¾
 	par(mar=c(4,1,2,1),mgp=c(2,0.5,0))
 	LOGindex=10 
 	hrLow = log(as.numeric(hrLow),LOGindex)
@@ -84,14 +84,14 @@ bioForest=function(coxFile=null, forestFile=null){
 	axis(1,a1,LOGindex^a1)
 	dev.off()
 }
-############»æÖÆÉ­ÁÖÍ¼º¯Êı############
+############ç»˜åˆ¶æ£®æ—å›¾å‡½æ•°############
 
-#»æÖÆÉ­ÁÖÍ¼
+#ç»˜åˆ¶æ£®æ—å›¾
 bioForest(coxFile="uniCox.txt", forestFile="forest.pdf")
 
 
 ######Video source: https://ke.biowolf.cn
-######ÉúĞÅ×ÔÑ§Íø: https://www.biowolf.cn/
-######Î¢ĞÅ¹«ÖÚºÅ£ºbiowolf_cn
-######ºÏ×÷ÓÊÏä£ºbiowolf@foxmail.com
-######´ğÒÉÎ¢ĞÅ: 18520221056
+######ç”Ÿä¿¡è‡ªå­¦ç½‘: https://www.biowolf.cn/
+######å¾®ä¿¡å…¬ä¼—å·ï¼šbiowolf_cn
+######åˆä½œé‚®ç®±ï¼šbiowolf@foxmail.com
+######ç­”ç–‘å¾®ä¿¡: 18520221056
