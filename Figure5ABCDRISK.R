@@ -2,21 +2,21 @@
 #install.packages("survminer")
 #install.packages("timeROC")
 
-#ÒıÓÃ°ü
+#å¼•ç”¨åŒ…
 library(survival)
 library(survminer)
 library(timeROC)
 
-inputFile="risk.txt"        #ÊäÈëÎÄ¼ş
-survFile="survival.pdf"         #Éú´æÇúÏßÎÄ¼ş
-rocFile="ROC.pdf"               #ROCÇúÏßÎÄ¼ş
-setwd("C:\\Users\\11111\\Desktop\\»µËÀĞÔµòÍönecroptosis\\17Éú´æÇúÏß¼°ROCÇúÏß")      #ÉèÖÃ¹¤×÷Ä¿Â¼
+inputFile="risk.txt"        #è¾“å…¥æ–‡ä»¶
+survFile="survival.pdf"         #ç”Ÿå­˜æ›²çº¿æ–‡ä»¶
+rocFile="ROC.pdf"               #ROCæ›²çº¿æ–‡ä»¶
+setwd("C:\\Users\\11111\\Desktop\\åæ­»æ€§å‡‹äº¡necroptosis\\17ç”Ÿå­˜æ›²çº¿åŠROCæ›²çº¿")      #è®¾ç½®å·¥ä½œç›®å½•
 
 
-#¶ÁÈ¡ÊäÈëÎÄ¼ş
+#è¯»å–è¾“å…¥æ–‡ä»¶
 rt=read.table(inputFile,header=T,sep="\t")
 
-#±È½Ï¸ßµÍ·çÏÕ×éÉú´æ²îÒì£¬µÃµ½ÏÔÖøĞÔpÖµ
+#æ¯”è¾ƒé«˜ä½é£é™©ç»„ç”Ÿå­˜å·®å¼‚ï¼Œå¾—åˆ°æ˜¾è‘—æ€§på€¼
 diff=survdiff(Surv(futime, fustat) ~risk,data = rt)
 pValue=1-pchisq(diff$chisq,df=1)
 fit <- survfit(Surv(futime, fustat) ~ risk, data = rt)
@@ -25,7 +25,7 @@ if(pValue<0.001){
 }else{
 	pValue=paste0("p=",sprintf("%.03f",pValue))
 }
-#»æÖÆÉú´æÇúÏß
+#ç»˜åˆ¶ç”Ÿå­˜æ›²çº¿
 surPlot=ggsurvplot(fit, 
 		           data=rt,
 		           conf.int=T,
@@ -44,7 +44,7 @@ print(surPlot)
 dev.off()
 
 
-###ROCÇúÏß
+###ROCæ›²çº¿
 ROC_rt=timeROC(T=rt$futime,delta=rt$fustat,
                marker=rt$riskScore,cause=1,
                weighting='aalen',
